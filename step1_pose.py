@@ -1,12 +1,13 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-
+import os
+os.environ["PYOPENGL_PLATFORM"] = "osmesa"
 import cv2
 import h5py
 import argparse
 import numpy as np
 import chumpy as ch
-import cPickle as pkl
+import pickle as pkl
 
 from opendr.camera import ProjectPoints
 from opendr.lighting import LambertianPointLight
@@ -242,22 +243,27 @@ def main(keypoint_file, masks_file, camera_file, out, model_file, prior_file, re
     else:
         regs = np.load('vendor/smplify/models/regressors_locked_normalized_male.npz')
         b2m = np.load('assets/b2m_m.npy')
-
+    print("test1")
     keypoints = h5py.File(keypoint_file, 'r')['keypoints']
+    print("test2")
     masks = h5py.File(masks_file, 'r')['masks']
+    print("test3")
     num_frames = masks.shape[0]
-
+    print("test3.1")
     # init
     base_smpl = Smpl(model_data)
+    print("test3.2")
     base_smpl.trans[:] = np.array([0, 0, 3])
+    print("test3.3")
     base_smpl.pose[0] = np.pi
+    print("test3.4")
     base_smpl.pose[3:] = prior_data['mean']
-
+    print("test4")
     camera = ProjectPoints(t=np.zeros(3), rt=np.zeros(3), c=camera_data['camera_c'] * resize,
                            f=camera_data['camera_f'] * resize, k=camera_data['camera_k'], v=base_smpl)
     frustum = {'near': 0.1, 'far': 1000.,
                'width': int(camera_data['width'] * resize), 'height': int(camera_data['height'] * resize)}
-
+    print("test5")
     if display:
         debug_cam = ProjectPoints(v=base_smpl, t=camera.t, rt=camera.rt, c=camera.c, f=camera.f, k=camera.k)
         debug_light = LambertianPointLight(f=base_smpl.f, v=base_smpl, num_verts=len(base_smpl), light_pos=np.zeros(3),
