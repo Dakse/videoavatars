@@ -229,13 +229,13 @@ def main(keypoint_file, masks_file, camera_file, out, model_file, prior_file, re
 
     # load data
     with open(model_file, 'rb') as fp:
-        model_data = pkl.load(fp)
+        model_data = pkl.load(fp, encoding='latin1')
 
     with open(camera_file, 'rb') as fp:
-        camera_data = pkl.load(fp)
+        camera_data = pkl.load(fp,  encoding='latin1')
 
     with open(prior_file, 'rb') as fp:
-        prior_data = pkl.load(fp)
+        prior_data = pkl.load(fp,  encoding='latin1')
 
     if 'basicModel_f' in model_file:
         regs = np.load('vendor/smplify/models/regressors_locked_normalized_female.npz')
